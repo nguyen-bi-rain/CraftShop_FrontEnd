@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import Hero from '../../components/Hero/Hero'
 import Category from '../../components/Category/Category'
 import Material from '../../components/Material/Material'
@@ -8,6 +7,7 @@ import InfoImage from "../../assets/Insta_600x.png.png"
 import styles from "./style.module.css"
 import Item from "../../assets/items1.png"
 import Item2 from "../../assets/items2.png"
+import { Link } from 'react-router-dom'
 
 
 
@@ -33,7 +33,7 @@ const Home = () => {
             <h2 className="text-3xl font-medium text-[#282828] capitalize font-['Lora'] ">New Product <span className='inline-block w-[85px] h-[2px] bg-[#913B10] ml-1'></span></h2>
           </div>
           <div>
-            <button className='text-medium text-base text-[#282828] px-5 py-[0.625rem] border-2 border-black hover:bg-black hover:text-white transition ease-in-out duration-150'>SEE ALL</button>
+            <Link to='/product' className='text-medium text-base text-[#282828] px-5 py-[0.625rem] border-2 border-black hover:bg-black hover:text-white transition ease-in-out duration-150'>SEE ALL</Link>
           </div>
         </div>
         <div className='px-4'>
@@ -78,14 +78,14 @@ const Home = () => {
             <h2 className="text-3xl font-medium text-[#282828] capitalize font-['Lora'] ">New Product <span className='inline-block w-[85px] h-[2px] bg-[#913B10] ml-1'></span></h2>
           </div>
           <div>
-            <button className='text-medium text-base text-[#282828] px-5 py-[0.625rem] border-2 border-black hover:bg-black hover:text-white transition ease-in-out duration-150'>SEE ALL</button>
+            <Link to='/product' className='text-medium text-base text-[#282828] px-5 py-[0.625rem] border-2 border-black hover:bg-black hover:text-white transition ease-in-out duration-150'>SEE ALL</Link>
           </div>
         </div>
         <div className='px-4 mb-9'>
           <ProductList number={10} numberItems={5}/>
         </div>
         <div className="text-center">
-          <button className='px-9 py-4 bg-[#778C7E] font-medium text-white'>VIEW ALL</button>
+          <Link to={'/product'} className='px-9 py-4 bg-[#778C7E] font-medium text-white'>VIEW ALL</Link>
         </div>
       </div>
       <div className='bg-[#913B10] pb-24 pt-16'>

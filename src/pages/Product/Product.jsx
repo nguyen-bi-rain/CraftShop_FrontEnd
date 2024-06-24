@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import FilterItem from "../../components/FilterItem/FilterItem"
-import ProductItem from "../../components/ProductItem/ProductItem"
 import ProductList from "../../components/ProductList/ProductList"
 import { fetchData } from "../../services"
 
@@ -15,11 +14,12 @@ const Product = () => {
     { text: "Donna ricco" }
   ]
   const [data,setData] = useState([])
-  
+  const [totalItems,setToalItems] = useState(0)
   useEffect(() =>{
     fetchData().then((res) =>{
       console.log(res);
-      setData(res.result)
+      setData(res.data.result)
+      setToalItems(res.pagination.TotalCount)
     })
   },[])
 
@@ -39,7 +39,7 @@ const Product = () => {
       </div>
       <div className='col-start-2 col-end-10'>
         <div className="flex justify-between">
-          <p>1,000 item found</p>
+          <p>{totalItems} item found</p>
           <select className="border-2 border-black">
             <option value="price(low to high)">price (high to low)</option>
             <option value="price(high to low)">price (low to high)</option>
