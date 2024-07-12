@@ -8,17 +8,25 @@ import styles from "./style.module.css"
 import Item from "../../assets/items1.png"
 import Item2 from "../../assets/items2.png"
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { fetchData } from '../../services/index';
 
 
 
 const Home = () => {
+  const [data, setData] = useState([]);
+
   const Images = [
     {
       src: "https://ik.imagekit.io/tvlk/blog/2023/01/go-and-share-trai-nghiem-lam-gom-bat-trang-13.jpg"
     }
   ]
+  useEffect(() => {
+    fetchData(5, 1).then((res) => {
+      setData(res.data.result);
+    });
+  }, []);
 
-    
   return (
     <div>
       <div className='mb-3'>
@@ -37,7 +45,7 @@ const Home = () => {
           </div>
         </div>
         <div className='px-4'>
-          <ProductList number={5} numberItems={5}/>
+          <ProductList number={5} numberItems={5} dataSet={data} />
         </div>
 
       </div>
@@ -82,7 +90,7 @@ const Home = () => {
           </div>
         </div>
         <div className='px-4 mb-9'>
-          <ProductList number={10} numberItems={5}/>
+          <ProductList number={10} numberItems={5} dataSet={data} />
         </div>
         <div className="text-center">
           <Link to={'/product'} className='px-9 py-4 bg-[#778C7E] font-medium text-white'>VIEW ALL</Link>
@@ -116,7 +124,7 @@ const Home = () => {
               <img src={Item} alt="items" />
             </div>
           </div>
-          
+
         </div>
       </div>
     </div>

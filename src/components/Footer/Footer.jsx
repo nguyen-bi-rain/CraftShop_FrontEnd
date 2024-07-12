@@ -49,7 +49,7 @@ const Footer = () => {
                         <h5 className="uppercase font-medium text-sm mb-5">usefull links</h5>
                         <div className="text-sm flex">
                             <img className="mr-3" src={GGP} alt="google play" />
-                            <img className="w-full object-fill" src={APP} alt="app store" />
+                            <img className="" src={APP} alt="app store" />
                         </div>
                     </div>
                     <div>

@@ -20,8 +20,7 @@ const Signin = () => {
         onSubmit : async (values) => {
             try{
                 const login  = await LoginApi(values)
-            console.log(login.result.token);
-            localStorage.setItem('user',login.result)
+            localStorage.setItem('user',login.result.token)
             toast.success('Welcome to our website!')
             navigate('/')
             window.location.reload()

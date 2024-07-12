@@ -21,6 +21,7 @@ const Header = (props)  =>{
     const token = localStorage.getItem('user');
   const handleLogout = () => {
     localStorage.removeItem('user');
+    sessionStorage.removeItem('cart');
     window.location.reload()
   }
 

@@ -9,7 +9,8 @@ import Signup from './auth/Signup';
 import { ToastContainer } from 'react-toastify';
 import Cart from './components/Cart/Cart';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaSellcast } from 'react-icons/fa';
+import Account from './pages/Account/Account';
+import { PATH } from './constant/path';
 
 export default function App() {
   return (
@@ -17,12 +18,16 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route path='/' element={<Home />} />
-            <Route path='/product' element={<Product />} />
-            <Route path='/product/:id' element={<ProductDetail />} /> {/* add the new route */}
-            <Route path='/signin' element={<Signin />} />
-            <Route path='/signup' element={<Signup />} />
-            <Route path='/cart' element={<Cart/>}/>
+            <Route path={PATH.HOME} element={<Home />} />
+            <Route path={PATH.PRODUCT} element={<Product />} />
+            <Route path={`${PATH.PRODUCT}/:id`} element={<ProductDetail />} /> {/* add the new route */}
+            <Route path={PATH.LOGIN} element={<Signin />} />
+            <Route path={PATH.REGISTER} element={<Signup />} />
+            <Route path={PATH.CART} element={<Cart/>}/>
+            <Route path='/editaccount' element={<Account />} />
+            <Route path={PATH.ACCOUNT} element={<Account />} />
+            <Route path='/orders' element={<Account />} />
+            <Route path='/action' element={<Account />} />
           </Route>
           
         </Routes>

@@ -24,7 +24,6 @@ const ProductItem = ({ image, name, price, id }) => {
             if (!existingItem) {
                 dispatch(addToCart({ productId: id, quantity: 1 }))
                 toast.success('Item added to cart');
-                // Update state to trigger re-render
             } else {
                 toast.info('Item already in cart');
             }

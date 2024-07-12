@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
     items: sessionStorage.getItem("cart") ? JSON.parse(sessionStorage.getItem("cart")) : [],
-    statusTab: false
 }
 const cartlice = createSlice({
     name: 'cart',
@@ -27,14 +27,12 @@ const cartlice = createSlice({
             }
             sessionStorage.setItem("cart", JSON.stringify(state.items));
         },
-        toggleStatusTab(state){
-            if(state.statusTab === false){
-                state.statusTab = true;
-            }else{
-                state.statusTab = false;
-            }
+        RemoveItem(state, action){
+            const {productId} = action.payload;
+            state.items = (state.items).filter(item => item.productId !== productId);
+            sessionStorage.setItem("cart", JSON.stringify(state.items));
         }
     }
 })
-export const { addToCart, changeQuantity, toggleStatusTab } = cartlice.actions;
+export const { addToCart, changeQuantity,RemoveItem } = cartlice.actions;
 export default cartlice.reducer;

@@ -9,9 +9,10 @@ import EmptyStar from "../../assets/empty-star.svg";
 import { useEffect, useState } from 'react';
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import ProductList from '../../components/ProductList/ProductList';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, changeQuantity } from '../../stores/cart';
+import { fetchData } from '../../services';
 
 export default function ProductDetail() {
     const { id } = useParams();
@@ -19,8 +20,7 @@ export default function ProductDetail() {
     const [quantity, setQuantity] = useState(1);
     const [data, setData] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const navigate = useNavigate();
-
+    const [list,setList] = useState([])
 
     //redux handle add to cart
     const cart = useSelector(state => state.cart.items);
@@ -44,8 +44,13 @@ export default function ProductDetail() {
         };
 
         fetchProduct();
+        listProduct();
     }, []);
-
+    function listProduct(){
+        fetchData(5,1).then((res) =>{
+            setList(res.data.result)
+        })
+    }
     if (!data) {
         return <div>Loading...</div>;
     }
@@ -69,27 +74,23 @@ export default function ProductDetail() {
     const handleClickUpQuantity = () => {
         setQuantity(quantity + 1);
     };
+
+    
+
     const handleAddToCart = (id) => {
         if (localStorage.getItem('user') == null) {
             toast.error('please login to add to cart', { position: 'top-right' })
         }
-        else {
-            // Get the existing cart data from sessionStorage
-            const existingCart = JSON.parse(sessionStorage.getItem('cart')) || [];
-
-            // Check if the item already exists in the cart
-            const existingItem = existingCart.find(item => item.id === data.id);
-
-            let updatedCart;
+        else 
+        {
+            const existingItem = cart.find(item => item.id === data.id);
             if (existingItem) {
                 // If the item exists, create a new array where the quantity of the existing item is updated
-                dispatch(changeQuantity({ productId: id, quantity: quantity }))
-            } else {
+                dispatch(changeQuantity({ productId: data.id, quantity: quantity }))
+            } else {    
                 // If the item doesn't exist, add it to the end of the array
-                dispatch(addToCart({ productId: id, quantity: quantity }))
-
+                dispatch(addToCart({ productId: data.id, quantity: quantity }))
             }
-
             // Store the updated cart in sessionStorage
             toast.success('Added to cart')
         }
@@ -146,7 +147,7 @@ export default function ProductDetail() {
                             </div>
                         </div>
                         <div className='mb-7'>
-                            <button className='px-10 bg-[#0C2B63] text-base uppercase text-white font-semibold py-3 border-[#0C2B63] ml-5' onClick={handleAddToCart}>Add to cart</button>
+                            <button className='px-10 bg-[#0C2B63] text-base uppercase text-white font-semibold py-3 border-[#0C2B63] ml-5' onClick={handleAddToCart} type='button'>Add to cart</button>
                             <button className='px-10 py-3 text-base uppercase border-2 border-[#0C2B63] ml-5' onClick={() => setWishlist(!wishlist)}>
                                 {wishlist ? <FaHeart className='inline-block mb-1 mr-2' /> : <FaRegHeart className='inline-block mb-1 mr-2' />} Save
                             </button>
@@ -225,11 +226,10 @@ export default function ProductDetail() {
                     </div>
                 </div>
                 <div className='px-4'>
-                    <ProductList number={5} numberItems={5} />
+                    <ProductList number={5} numberItems={5} dataSet={list}/>
                 </div>
 
             </div>
-            <ToastContainer />
         </div>
     );
 }

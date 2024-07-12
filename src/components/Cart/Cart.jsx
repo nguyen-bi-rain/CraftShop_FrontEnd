@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getProductById } from '../../services'
+import { useDispatch, useSelector } from 'react-redux'
+import { RemoveItem, changeQuantity } from '../../stores/cart'
 const Cart = () => {
     const [cartData, setCartData] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
-    const [renderCount, setRenderCount] = useState(0)
-    const item = JSON.parse(sessionStorage.getItem('cart'))
-
-
+    const item = useSelector(state => state.cart.items);    
+    const dispatch = useDispatch()
 
     useEffect(() => {
         retrieveData()
         console.log(cartData);
-        if (renderCount === 0) {
-            setRenderCount(1);
-        }
-    }, [renderCount])
+    }, [item])
 
     const retrieveData = async () => {
         let sum = 0;
@@ -24,7 +21,6 @@ const Cart = () => {
                 item.map(async (c) => {
                     const res = await getProductById(c.productId);
                     sum += res.result.productPrice * c.quantity;
-
                     return { data: res.result, quantity: c.quantity };
                 })
             );
@@ -34,15 +30,14 @@ const Cart = () => {
     };
 
     const handleRemove = (id) => {
-        const newCart = item.filter((c) => c.id !== id);
-        sessionStorage.setItem('cart', JSON.stringify(newCart));
-        setRenderCount(renderCount + 1);
+        dispatch(RemoveItem({ productId: id }))
     }
 
-    const handleQuantityOfItemChange = () => {
-
-        const sum = cartData.reduce((totalPrice, c) => totalPrice + c.data.productPrice * c.quantity, 0)
-        setTotalPrice(sum)
+    const handleQuantityIncrease = (c) =>{
+        dispatch(changeQuantity({productId: c.data.id, quantity: c.quantity + 1}))
+    }
+    const handleQuantityDescrease  = (c) =>{
+        dispatch(changeQuantity({productId: c.data.id, quantity: c.quantity + -1}))
     }
     const formateCurenncy = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
     return (
@@ -76,12 +71,12 @@ const Cart = () => {
                                 </div>
                             </div>
                             <div className="flex justify-center w-1/5">
-                                <svg onClick={handleQuantityOfItemChange} className="fill-current text-gray-600 w-3" viewBox="0 0 448 512"><path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                                <svg onClick={() => handleQuantityDescrease(c)} className="fill-current text-gray-600 w-3" viewBox="0 0 448 512"><path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                                 </svg>
 
                                 <input className="mx-2 border text-center w-8" type="text" value={c.quantity} />
 
-                                <svg onClick={handleQuantityOfItemChange} className="fill-current text-gray-600 w-3" viewBox="0 0 448 512">
+                                <svg onClick={() => handleQuantityIncrease(c)} className="fill-current text-gray-600 w-3" viewBox="0 0 448 512">
                                     <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                                 </svg>
                             </div>
