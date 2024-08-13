@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom'
 import { getProductById } from '../../services'
 import { useDispatch, useSelector } from 'react-redux'
 import { RemoveItem, changeQuantity } from '../../stores/cart'
+import CreateOrder from '../Order/CreateOrder'
 const Cart = () => {
     const [cartData, setCartData] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
+    const [isCheckout,setIsCheckout] = useState(false)
+    const [orderItem, setOrderItem] = useState([])
     const item = useSelector(state => state.cart.items);    
     const dispatch = useDispatch()
 
@@ -28,6 +31,12 @@ const Cart = () => {
             setCartData([...CartList]);
         }
     };
+    const handdelCheckout = () =>{
+        cartData.forEach( (c) =>{
+            setOrderItem([...orderItem, {productId: c.data.id, quantity: c.quantity, price: c.data.productPrice}])
+        })
+        setIsCheckout(true)
+    }
 
     const handleRemove = (id) => {
         dispatch(RemoveItem({ productId: id }))
@@ -101,23 +110,19 @@ const Cart = () => {
                         <span className="font-semibold text-sm uppercase">Items {item ? item.length : 0}</span>
                         <span className="font-semibold text-sm">{formateCurenncy.format(totalPrice)}</span>
                     </div>
-                    <div>
-                        <label className="font-medium inline-block mb-3 text-sm uppercase">Shipping</label>
-                        <select className="block p-2 text-gray-600 w-full text-sm">
-                            <option>Standard shipping - 10.000 đ</option>
-                        </select>
-                    </div>
+                   
 
                     <div className="border-t mt-8">
                         <div className="flex font-semibold justify-between py-6 text-sm uppercase">
                             <span>Total cost</span>
-                            <span>{formateCurenncy.format(totalPrice + 10000)}</span>
+                            <span>{formateCurenncy.format(totalPrice)}</span>
                         </div>
-                        <button className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">Checkout</button>
+                        <button className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full" onClick={handdelCheckout}>Checkout</button>
                     </div>
                 </div>
 
             </div>
+            {isCheckout ? <CreateOrder totalPrice={totalPrice} orderItem={orderItem}/> : ""}
         </div>
     )
 }

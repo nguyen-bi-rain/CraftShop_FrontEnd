@@ -2,12 +2,14 @@ import * as Yup from 'yup'
 import React from 'react'
 import { useFormik } from 'formik'
 import { LoginApi } from '../services'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { UseAuth } from '../Context/AuthContext'
 
 const Signin = () => {
     const navigate = useNavigate()
-    
+    const Auth = UseAuth()
+
     const fomik = useFormik({
         initialValues: {
             email: '',
@@ -17,18 +19,18 @@ const Signin = () => {
             email: Yup.string().email().required('Required'),
             password: Yup.string().min(8).required('Required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$/, 'Password must be have at least one lowercase letter,one digit, uppercase and one special character')
         }),
-        onSubmit : async (values) => {
-            try{
-                const login  = await LoginApi(values)
-            localStorage.setItem('user',login.result.token)
-            toast.success('Welcome to our website!')
-            navigate('/')
-            window.location.reload()
-            }catch(e){
+        onSubmit: async (values) => {
+            try {
+                const login = await LoginApi(values)
+                Auth.login(login.result)
+                toast.success('Welcome to our website!')
+                navigate('/')
+                // window.location.reload()
+            } catch (e) {
                 console.log(e)
             }
         }
-    }) 
+    })
     return (
         <div className='w-full flex justify-center mt-10'>
             <div class="w-full max-w-sm bg-white shadow-md rounded">
@@ -57,7 +59,7 @@ const Signin = () => {
                         </a>
                     </div>
                 </form>
-                
+
             </div>
         </div>
     )

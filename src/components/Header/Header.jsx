@@ -8,41 +8,44 @@ import styles from "./style.module.css"
 import Navbar from '../NavBar/Navbar';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { UseAuth } from '../../Context/AuthContext';
 
-const Header = (props)  =>{
-
+const Header = (props) => {
+  
   const [totalQuantity, setTotalQuantity] = useState(0);
-    const carts = useSelector(store => store.cart.items);
-    useEffect(() => {
-        let total = 0;
-        carts.forEach(item => total += item.quantity);
-        setTotalQuantity(total);
-    }, [carts])
-    const token = localStorage.getItem('user');
+  const carts = useSelector(store => store.cart.items);
+  useEffect(() => {
+    let total = 0;
+    carts.forEach(item => total += item.quantity);
+    setTotalQuantity(total);
+  }, [carts])
+  const Auth = UseAuth()
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('cart');
-    window.location.reload()
+    Auth.logout()
+    // window.location.reload()
   }
 
+  
   return (
     <header className='bg-[#913B10]'>
       <div className='md:container md:mx-auto'>
         <div className='flex items-center justify-between  border-b-2 pb-4' >
           <div className='text-white'>
-            <p><CiSearch className='inline w-6 h-6' /><span className='hidden md:inline'> What are you looking for</span> </p>
+            <p><CiSearch className='inline w-6 h-6' /><span className='hidden md:inline transition-all'> What are you looking for</span></p>
+            
           </div>
           <Link to="/">
             <img src={Logo} alt='logo'></img>
           </Link>
           <div className='flex items-center justify-center text-white gap-3 font-medium'>
-            {token != null ? <div className='flex items-center justify-center text-white gap-3 font-medium relative'>
+            {Auth.auth ?
+              <div className='flex items-center justify-center text-white gap-3 font-medium relative'>
 
-              <FaRegUser onClick={handleLogout} />
-              <FaRegHeart />
-              <Link to='cart'><PiShoppingBag /></Link>
-              <p className={styles.cart} >{totalQuantity}</p>
-            </div>
+                <FaRegUser onClick={() => handleLogout()} />
+                <FaRegHeart />
+                <Link to='cart'><PiShoppingBag /></Link>
+                <p className={styles.cart} >{totalQuantity}</p>
+              </div>
               : <span><Link to='/signin'>Sing in </Link>/ <Link to='/signup'>Sign up</Link></span>
             }
           </div>

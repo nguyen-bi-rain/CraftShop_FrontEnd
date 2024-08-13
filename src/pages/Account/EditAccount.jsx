@@ -3,6 +3,7 @@ import { getUserAccount, UpdateUserAccount } from '../../services';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 const EditAccount = () => {
 
 
@@ -47,15 +48,16 @@ const EditAccount = () => {
         onSubmit: async (values) => {
             try {
                 const res = await UpdateUserAccount(values).then((res) => console.log(res)); 
-                console.log(res);
-                debugger
-
+                toast.success('Profile updated successfully');
                 navigate('/account')
             } catch (err) {
                 console.log(err);
             }
         }
     })
+    function handleCancel() {
+        navigate('/account' )
+    }
     console.log(formik.initialValues);
     if (loading) {
         return <div>Loading...</div>;
@@ -125,6 +127,9 @@ const EditAccount = () => {
                 <div>
                     <button type='submit' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Save
+                    </button>
+                    <button onClick={handleCancel} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4">
+                        Cancel
                     </button>
                 </div>
 

@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { GrFormPrevious } from "react-icons/gr";

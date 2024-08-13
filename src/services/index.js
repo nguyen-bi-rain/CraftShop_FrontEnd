@@ -21,6 +21,15 @@ export const fetchData = async (pageSize, pageNumber) => {
     }
 };
 
+export const fetchCategory = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/category/Category`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const addData = async (item) => {
     try {
         const response = await axios.post(`${API_URL}/Product/${item}`);
@@ -98,7 +107,7 @@ export async function SearchProuct(name,categoryId,pageSize,pageNumber,minPrice,
 }
 
 
-export async function UpdateUserAccount(value,token){
+export async function UpdateUserAccount(value){
     try{
         const res = await axios.put(`${API_URL}/auth/UpdateAccount`,value,{
             headers : {
@@ -109,4 +118,76 @@ export async function UpdateUserAccount(value,token){
     }catch(err){
         throw err;
     }
+}
+export async function ChangeUserAccount(value,token) {
+    try {
+        const res = await axios.put(`${API_URL}/auth/UpdateUserPhoto`, value, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('user')}`,
+                "Content-Type" : 'multipart/form-data'
+            },
+            params:{
+                token : token
+            }
+        })
+        return res.data;
+    }catch(err){
+        throw err;
+    }
+}
+
+export async function CreateOrderAPI(value){
+    try{
+        const res  = await axios.post(`${API_URL}/Order`,value,{
+            headers :{
+                Authorization : `Bearer ${localStorage.getItem('user')}`
+            }
+        });
+        return res.data;
+    }catch (err){
+        throw err;
+        
+    }
+}
+
+export async function CreateOrderItem(value){
+    try{
+        const res =  await axios.post(`${API_URL}/orderItem`,value,{
+            headers : {
+                Authorization : `Bearer ${localStorage.getItem('user')}`    
+            }
+        });
+        return res.data;
+    }catch(err){
+        throw err;
+    }
+}
+
+export async function CreatePayment(value){
+    try{
+        const res = await  axios.post(`${API_URL}/Payment`,value,{
+            headers : {
+                Authorization : `Bearer ${localStorage.getItem('user')}`
+            },
+            params : {
+                token : `${localStorage.getItem('user')}`
+            }
+        })
+        return res.data
+    }catch(err){
+        throw err;
+    }
+}
+
+export async function CreateShipment(value){
+    try{
+        const res = await axios.post(`${API_URL}/ship/createShip`,value,{
+            headers : { 
+                Authorization : `Bearer ${localStorage.getItem('user')}`
+            }
+        })
+        return res.data
+    }catch(err){
+        throw err;
+    }   
 }
